@@ -3,6 +3,7 @@ $(document).ready(function () {
     var url = "ajax/ajaxCard";
     var ajaxobj = new AjaxObject(url, 'json');
     ajaxobj.getall();
+
     // table hover cross color change 
     $('td').mouseover(function () {
         $(this).siblings().css('background-color', '#0c9'); //同層換色
@@ -91,7 +92,11 @@ $(document).ready(function () {
         var url = "ajax/ajaxCard";
         var ajaxobj = new AjaxObject(url, 'json');
         ajaxobj.id = deleteid;
-        ajaxobj.delete();
+        $('#delcfmModel').modal();
+        $('#delcfmModel').on('click', '#deleteConfirm', function () {
+            console.log('AAA')
+            ajaxobj.delete();
+        });
     })
     // 點擊手機顯示資訊
     $(".phone").on('click', function () {
@@ -107,6 +112,7 @@ $(document).ready(function () {
     //     // $("#dialog-confirm").dialog("option", "height", dHeight);
     // });
 });
+
 function refreshTable(data) {
     // var HTML = '';
     $("#cardtable tbody > tr").remove();
@@ -125,8 +131,8 @@ function refreshTable(data) {
         row.append($("<td></td>").html(strsex));
         row.append($(`<td class="phone" data-toggle="popover" title="聯絡方式：" data-content="${phone}"></td>`).html(''|item.phone));
         row.append($("<td></td>").html(''|item.email));
-        row.append($("<td></td>").html('<button id="modifybutton' + item.s_sn + '" class="modifybutton" style="font-size:16px;font-weight:bold;">修改 <span class="glyphicon glyphicon-list-alt"></span></button>'));
-        row.append($("<td></td>").html('<button id="deletebutton' + item.s_sn + '" class="deletebutton" style="font-size:16px;font-weight:bold;">刪除 <span class="glyphicon glyphicon-trash"></span></button>'));
+        row.append($("<td></td>").html('<button id="modifybutton' + item.s_sn + '" class="btn btn-secondary modifybutton" style="font-size:16px;font-weight:bold;">修改 <span class="glyphicon glyphicon-list-alt"></span></button>'));
+        row.append($("<td></td>").html('<button id="deletebutton' + item.s_sn + '" class="btn btn-danger deletebutton" style="font-size:16px;font-weight:bold;">刪除 <span class="glyphicon glyphicon-trash"></span></button>'));
         $("#cardtable").append(row);
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
@@ -255,4 +261,5 @@ AjaxObject.prototype.search = function () {
 AjaxObject.prototype.delete = function () {
     response = '[{"s_sn":"35","cnname":"邱小甘","enname":"Peter","sex":"0"},{"s_sn":"49","cnname":"蔡凡昕","enname":"Allen","sex":"0"}]';
     refreshTable(JSON.parse(response));
+    $('#delcfmModel').modal('hide')
 }
